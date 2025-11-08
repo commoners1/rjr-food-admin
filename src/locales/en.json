@@ -1,0 +1,25 @@
+
+{
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "reimbursement": "Reimbursement",
+    "leave": "Leave",
+    "salary": "Salary",
+    "overtime": "Overtime",
+    "attendance": "Attendance",
+    "search": "Search...",
+    "profile": "Profile",
+    "timesheet": "Timesheet",
+    "users": "Users",
+    "medical": "Medical",
+    "benefits": "Benefits",
+    "workflow": "Workflow",
+    "job_order": "Job Order",
+    "division": "Division",
+    "master_data": "Master Data",
+    "location": "Location",
+    "role": "Role",
+    "overtime_type": "Overtime Type",
+    "settings": "Settings",
+    "company_profile": "Company Profile"
+}

@@ -1,0 +1,25 @@
+
+{
+    "dashboard": "Dasbor",
+    "inventory": "Inventaris",
+    "reimbursement": "Penggantian",
+    "leave": "Cuti",
+    "salary": "Gaji",
+    "overtime": "Lembur",
+    "attendance": "Absensi",
+    "search": "Cari...",
+    "profile": "Profil",
+    "timesheet": "Lembar Waktu",
+    "users": "Pengguna",
+    "medical": "Medis",
+    "benefits": "Tunjangan",
+    "workflow": "Alur Kerja",
+    "job_order": "Perintah Kerja",
+    "division": "Divisi",
+    "master_data": "Data Master",
+    "location": "Lokasi",
+    "role": "Peran",
+    "overtime_type": "Tipe Lembur",
+    "settings": "Pengaturan",
+    "company_profile": "Profil Perusahaan"
+}
