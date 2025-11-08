@@ -33,9 +33,22 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, isLoading } = useUser();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
-    }
+    // Give a small delay to allow user state to be set after login
+    const timer = setTimeout(() => {
+      if (!isLoading && !user) {
+        // Check localStorage as fallback
+        if (typeof window !== 'undefined') {
+          const storedUserId = localStorage.getItem('currentUserId');
+          if (!storedUserId) {
+            router.push("/login");
+          }
+        } else {
+          router.push("/login");
+        }
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, [user, isLoading, router]);
 
   if (isLoading) {

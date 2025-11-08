@@ -1,38 +1,32 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Search, DollarSign, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { salesData, ordersData } from '@/lib/mock-data';
 
 export default function FinancePage() {
-  // Mock financial data
-  const revenueData = [
-    { month: 'Jan', revenue: 45000000, expenses: 30000000 },
-    { month: 'Feb', revenue: 52000000, expenses: 32000000 },
-    { month: 'Mar', revenue: 48000000, expenses: 31000000 },
-  ];
+  // Transform sales data for finance chart
+  const revenueData = salesData.slice(0, 3).map((item) => ({
+    month: item.name,
+    revenue: item.total * 10000, // Convert to rupiah scale
+    expenses: item.total * 6000, // Estimate expenses at 60% of revenue
+  }));
 
-  const ledgerEntries = [
-    {
-      id: '1',
-      date: '2024-01-15',
-      description: 'Order #ORD-001 Payment',
-      type: 'credit',
-      amount: 250000,
-      status: 'settled',
-    },
-    {
-      id: '2',
-      date: '2024-01-15',
-      description: 'Supplier Payment',
-      type: 'debit',
-      amount: 1500000,
-      status: 'pending',
-    },
-  ];
+  // Create ledger entries from orders
+  const ledgerEntries = ordersData.map((order, index) => ({
+    id: `LEDGER-${index + 1}`,
+    date: order.createdAt.split(' ')[0],
+    description: `Order ${order.orderNumber} Payment`,
+    type: 'credit' as const,
+    amount: order.total,
+    status: order.status === 'delivered' ? 'settled' as const : 'pending' as const,
+  }));
 
   return (
     <div className="space-y-6">

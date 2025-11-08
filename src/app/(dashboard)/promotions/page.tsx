@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,38 +10,13 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Plus, Search, Tag, Calendar, Users } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
+import { promotionsData } from '@/lib/mock-data';
 
 export default function PromotionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock promotions data
-  const promotions = [
-    {
-      id: '1',
-      code: 'WELCOME10',
-      name: 'Welcome Discount',
-      type: 'PERCENTAGE',
-      discountPercentage: 10,
-      minPurchaseAmount: 100000,
-      validFrom: '2024-01-01',
-      validUntil: '2024-12-31',
-      currentUses: 45,
-      maxUses: 1000,
-      isActive: true,
-    },
-    {
-      id: '2',
-      code: 'FREESHIP',
-      name: 'Free Shipping',
-      type: 'FREE_SHIPPING',
-      minPurchaseAmount: 50000,
-      validFrom: '2024-01-15',
-      validUntil: '2024-02-15',
-      currentUses: 120,
-      maxUses: 500,
-      isActive: true,
-    },
-  ];
+  // Use mock promotions data
+  const promotions = promotionsData;
 
   const getTypeBadge = (type: string) => {
     const config = {
@@ -74,18 +51,18 @@ export default function PromotionsPage() {
         <TabsContent value="all">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <CardTitle>All Promotions</CardTitle>
                   <CardDescription>Manage all promotional codes and discounts</CardDescription>
                 </div>
-                <div className="relative">
+                <div className="relative w-full sm:w-auto">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search promotions..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-8 w-64"
+                    className="pl-8 w-full sm:w-64"
                   />
                 </div>
               </div>
@@ -95,15 +72,15 @@ export default function PromotionsPage() {
                 {promotions.map((promo) => (
                   <div
                     key={promo.id}
-                    className="flex items-center justify-between border rounded-lg p-4 hover:bg-accent transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border rounded-lg p-4 hover:bg-accent transition-colors"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="h-10 w-10 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
                         <Tag className="h-5 w-5 text-primary" />
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{promo.code}</h3>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-semibold truncate">{promo.code}</h3>
                           {getTypeBadge(promo.type)}
                           {promo.isActive ? (
                             <Badge className="bg-green-500">Active</Badge>

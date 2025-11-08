@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,29 +10,26 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, Camera, UserCheck, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
+import { attendanceData, usersData } from '@/lib/mock-data';
 
 export default function AttendancePage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock attendance data
-  const attendanceRecords = [
-    {
-      id: '1',
-      employee: 'John Doe',
-      checkIn: '09:00',
-      checkOut: '18:00',
-      status: 'present',
-      verified: true,
-    },
-    {
-      id: '2',
-      employee: 'Jane Smith',
-      checkIn: '09:15',
-      checkOut: null,
-      status: 'present',
-      verified: true,
-    },
-  ];
+  // Transform attendance data for display
+  const attendanceRecords = attendanceData.map((record) => {
+    const user = usersData.find((u) => u.id === record.userId);
+    const checkInTime = new Date(record.clockInTime);
+    const checkOutTime = record.clockOutTime ? new Date(record.clockOutTime) : null;
+    
+    return {
+      id: record.id,
+      employee: user?.name || 'Unknown',
+      checkIn: checkInTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      checkOut: checkOutTime?.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) || null,
+      status: record.status.toLowerCase().includes('attend') ? 'present' : 'absent',
+      verified: record.clockInLocationStatus === 'GPS In Range',
+    };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

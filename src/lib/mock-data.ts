@@ -174,16 +174,16 @@ export const inventoryData = [
       },
   ];
 
-export const usersData: (User & { managerId?: string, password?: string })[] = [
+export const usersData: (User & { managerId?: string, password?: string, jobPosition?: string, birthDate?: Date })[] = [
     {
         id: 'USER-001',
         name: 'Admin User',
         email: 'admin@notch.erp',
-        role: 'Admin' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-001', name: 'Admin' },
+        isActive: true,
         avatar: "https://placehold.co/100x100?text=AU",
         password: "password",
-        division: "IT",
+        division: { id: 'DIV-001', name: 'IT' },
         jobPosition: "System Administrator",
         birthDate: new Date("1985-01-15"),
     },
@@ -191,12 +191,12 @@ export const usersData: (User & { managerId?: string, password?: string })[] = [
         id: 'USER-002',
         name: 'John Doe (Manager)',
         email: 'john.doe@notch.erp',
-        role: 'Manager' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-002', name: 'Manager' },
+        isActive: true,
         avatar: "https://placehold.co/100x100?text=JD",
         password: "password",
         managerId: 'USER-005',
-        division: "Creative",
+        division: { id: 'DIV-005', name: 'Creative' },
         jobPosition: "Creative Director",
         birthDate: new Date("1990-05-20"),
     },
@@ -204,12 +204,12 @@ export const usersData: (User & { managerId?: string, password?: string })[] = [
         id: 'USER-003',
         name: 'Jane Smith (Employee)',
         email: 'jane.smith@notch.erp',
-        role: 'Employee' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-003', name: 'Employee' },
+        isActive: true,
         managerId: 'USER-002',
         avatar: "https://placehold.co/100x100?text=JS",
         password: "password",
-        division: "Creative",
+        division: { id: 'DIV-005', name: 'Creative' },
         jobPosition: "UI/UX Designer",
         birthDate: new Date("1995-08-25"),
     },
@@ -217,12 +217,12 @@ export const usersData: (User & { managerId?: string, password?: string })[] = [
         id: 'USER-004',
         name: 'HR User',
         email: 'hr.user@notch.erp',
-        role: 'HR' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-004', name: 'HR' },
+        isActive: true,
         avatar: "https://placehold.co/100x100?text=HR",
         password: "password",
         managerId: 'USER-005',
-        division: "HR",
+        division: { id: 'DIV-006', name: 'HR' },
         jobPosition: "HR Manager",
         birthDate: new Date("1988-11-30"),
     },
@@ -230,11 +230,11 @@ export const usersData: (User & { managerId?: string, password?: string })[] = [
         id: 'USER-005',
         name: 'Director User',
         email: 'director@notch.erp',
-        role: 'Director' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-005', name: 'Director' },
+        isActive: true,
         avatar: "https://placehold.co/100x100?text=DU",
         password: "password",
-        division: "Director",
+        division: { id: 'DIV-010', name: 'Director' },
         jobPosition: "Director",
         birthDate: new Date("1975-02-10"),
     },
@@ -242,11 +242,11 @@ export const usersData: (User & { managerId?: string, password?: string })[] = [
         id: 'USER-006',
         name: 'Finance User',
         email: 'finance@notch.erp',
-        role: 'Finance' as const,
-        status: 'Active' as const,
+        role: { id: 'ROLE-006', name: 'Finance' },
+        isActive: true,
         avatar: "https://placehold.co/100x100?text=FU",
         password: "password",
-        division: "Finance",
+        division: { id: 'DIV-007', name: 'Finance' },
         jobPosition: "Finance Controller",
         birthDate: new Date("1992-07-18"),
     }
@@ -636,3 +636,216 @@ allMonths.forEach(month => {
     }
 });
 monthlyLeaveData.sort((a,b) => allMonths.indexOf(a.name) - allMonths.indexOf(b.name));
+
+// ========== RESTAURANT/ORDER MANAGEMENT DATA ==========
+export const ordersData = [
+  {
+    id: 'ORD-001',
+    orderNumber: 'RJR-2024-001234',
+    customer: 'John Doe',
+    total: 250000,
+    status: 'preparing',
+    createdAt: '2024-01-15 10:30',
+    items: 3,
+  },
+  {
+    id: 'ORD-002',
+    orderNumber: 'RJR-2024-001235',
+    customer: 'Jane Smith',
+    total: 180000,
+    status: 'delivered',
+    createdAt: '2024-01-15 09:15',
+    items: 2,
+  },
+  {
+    id: 'ORD-003',
+    orderNumber: 'RJR-2024-001236',
+    customer: 'Bob Johnson',
+    total: 320000,
+    status: 'pending',
+    createdAt: '2024-01-15 11:00',
+    items: 4,
+  },
+];
+
+export const customersData = [
+  {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    phone: '+62 123 456 7890',
+    totalOrders: 12,
+    totalSpent: 2500000,
+    status: 'active',
+    joinedDate: '2024-01-01',
+  },
+  {
+    id: '2',
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    phone: '+62 987 654 3210',
+    totalOrders: 8,
+    totalSpent: 1800000,
+    status: 'active',
+    joinedDate: '2024-01-15',
+  },
+  {
+    id: '3',
+    name: 'Bob Johnson',
+    email: 'bob@example.com',
+    phone: '+62 555 123 4567',
+    totalOrders: 5,
+    totalSpent: 1200000,
+    status: 'active',
+    joinedDate: '2024-02-01',
+  },
+];
+
+// Generate more products for pagination testing
+const generateProducts = (): Array<{
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  status: 'active' | 'inactive';
+  image: string;
+}> => {
+  const baseProducts = [
+    { name: 'Spicy Ramen', price: 45000, category: 'Main Course' },
+    { name: 'Gourmet Burger', price: 75000, category: 'Main Course' },
+    { name: 'Margherita Pizza', price: 80000, category: 'Main Course' },
+    { name: 'Caesar Salad', price: 45000, category: 'Appetizer' },
+    { name: 'Fresh Lemonade', price: 15000, category: 'Drinks' },
+    { name: 'Chicken Teriyaki', price: 65000, category: 'Main Course' },
+    { name: 'Beef Steak', price: 120000, category: 'Main Course' },
+    { name: 'Fish & Chips', price: 55000, category: 'Main Course' },
+    { name: 'Spring Rolls', price: 35000, category: 'Appetizer' },
+    { name: 'Mango Smoothie', price: 25000, category: 'Drinks' },
+    { name: 'Chocolate Cake', price: 40000, category: 'Dessert' },
+    { name: 'Ice Cream', price: 20000, category: 'Dessert' },
+  ];
+
+  const products: Array<{
+    id: string;
+    name: string;
+    price: number;
+    category: string;
+    status: 'active' | 'inactive';
+    image: string;
+  }> = baseProducts.map((p, idx) => ({
+    id: `${idx + 1}`,
+    name: p.name,
+    price: p.price,
+    category: p.category,
+    status: 'active' as 'active' | 'inactive',
+    image: `https://placehold.co/200x200?text=${encodeURIComponent(p.name)}`,
+  }));
+
+  // Generate additional products to reach 100+ items
+  const categories = ['Main Course', 'Appetizer', 'Drinks', 'Dessert'];
+  const foodNames = [
+    'Pasta', 'Sushi', 'Tacos', 'Burrito', 'Soup', 'Sandwich', 'Wrap',
+    'Rice Bowl', 'Noodles', 'Curry', 'Stir Fry', 'Grilled', 'Fried',
+    'Baked', 'Steamed', 'Roasted', 'BBQ', 'Seafood', 'Vegetarian', 'Vegan'
+  ];
+
+  for (let i = products.length; i < 120; i++) {
+    const category = categories[Math.floor(Math.random() * categories.length)];
+    const foodName = foodNames[Math.floor(Math.random() * foodNames.length)];
+    const price = Math.floor(Math.random() * 100000) + 20000;
+    const status: 'active' | 'inactive' = Math.random() > 0.2 ? 'active' : 'inactive';
+    
+    products.push({
+      id: `${i + 1}`,
+      name: `${foodName} ${i + 1}`,
+      price,
+      category,
+      status,
+      image: `https://placehold.co/200x200?text=${encodeURIComponent(foodName)}`,
+    });
+  }
+
+  return products;
+};
+
+export const productsData = generateProducts();
+
+export const reviewsData = [
+  {
+    id: '1',
+    product: 'Spicy Ramen',
+    user: 'John Doe',
+    rating: 5,
+    comment: 'Amazing! Best ramen I\'ve ever had.',
+    sentiment: 'positive',
+    sentimentScore: 0.95,
+    createdAt: '2024-01-15T10:30:00Z',
+  },
+  {
+    id: '2',
+    product: 'Gourmet Burger',
+    user: 'Jane Smith',
+    rating: 4,
+    comment: 'Good burger, but a bit too expensive.',
+    sentiment: 'neutral',
+    sentimentScore: 0.65,
+    createdAt: '2024-01-14T15:20:00Z',
+  },
+  {
+    id: '3',
+    product: 'Margherita Pizza',
+    user: 'Bob Johnson',
+    rating: 5,
+    comment: 'Perfect pizza! Will order again.',
+    sentiment: 'positive',
+    sentimentScore: 0.92,
+    createdAt: '2024-01-13T12:10:00Z',
+  },
+];
+
+export const promotionsData = [
+  {
+    id: '1',
+    code: 'WELCOME10',
+    name: 'Welcome Discount',
+    type: 'PERCENTAGE',
+    discountPercentage: 10,
+    minPurchaseAmount: 100000,
+    validFrom: '2024-01-01',
+    validUntil: '2024-12-31',
+    currentUses: 45,
+    maxUses: 1000,
+    isActive: true,
+  },
+  {
+    id: '2',
+    code: 'FREESHIP',
+    name: 'Free Shipping',
+    type: 'FREE_SHIPPING',
+    minPurchaseAmount: 50000,
+    validFrom: '2024-01-15',
+    validUntil: '2024-02-15',
+    currentUses: 120,
+    maxUses: 500,
+    isActive: true,
+  },
+];
+
+export const bannersData = [
+  {
+    id: '1',
+    title: 'Summer Special',
+    image: 'https://placehold.co/800x300?text=Banner1',
+    link: '/promotions',
+    isActive: true,
+    order: 1,
+  },
+  {
+    id: '2',
+    title: 'New Menu Items',
+    image: 'https://placehold.co/800x300?text=Banner2',
+    link: '/menu',
+    isActive: true,
+    order: 2,
+  },
+];

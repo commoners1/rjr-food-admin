@@ -18,9 +18,8 @@ import { Logo } from "@/components/logo";
 import { useUser } from "@/hooks/use-user";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { AuthAPIs } from "@/lib/apis/auth/auth.apis";
+import { usersData } from "@/lib/mock-data";
 import { User } from "@/types/user";
-import { loginSchema } from "@/lib/validation/auth_validation";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,70 +28,84 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    const result = loginSchema.safeParse({ email, password });
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
-    if (!result.success) {
-      const firstError = result.error.errors[0]?.message || "Invalid input";
+    console.log('Login attempt:', { email, passwordLength: password.length });
+
+    // Basic validation
+    if (!email || !password) {
       toast({
         variant: "destructive",
         title: "Validation Error",
-        description: firstError,
+        description: "Please enter both email and password.",
       });
       return;
     }
 
     try {
-      const res = await AuthAPIs.login({ email, password });
-      console.log('Login response:', res); // Debug log
-      
-      // Mock adapter returns: { data: { user: {...}, accessToken: ... } }
-      // Response interceptor returns: { user: {...}, accessToken: ... }
-      // So res should be { user: {...}, accessToken: ... }
-      const user = res?.user;
-      
-      if (!user || !user.id) {
-        console.error('Invalid user data. Response:', res);
-        console.error('User object:', user);
-        throw new Error('Invalid response structure: user data not found');
+      const userToLogin = usersData.find((u) => u.email.toLowerCase() === email.toLowerCase());
+      console.log('User found:', userToLogin ? 'Yes' : 'No');
+
+      if (!userToLogin) {
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: `User not found. Available emails: ${usersData.map(u => u.email).join(', ')}`,
+        });
+        return;
       }
-      
-      const { id, name, role, isActive, division, avatar } = user;
-      
-      // Store tokens
-      if (res?.accessToken && typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', res.accessToken);
+
+      if (userToLogin.password !== password) {
+        console.log('Password mismatch:', { expected: userToLogin.password, received: password });
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Invalid password. Please try again.",
+        });
+        return;
       }
-      
-      // Create user data matching User type
+
+      console.log('Login successful, setting user data');
+
+      // Extract only User type properties (exclude password, jobPosition, birthDate)
       const userData: User = {
-        id,
-        name,
-        email: user.email || email,
-        role: typeof role === 'object' && role !== null ? role : { id: '1', name: role?.name || role || 'Admin' },
-        isActive: isActive ?? true,
-        division: typeof division === 'object' && division !== null ? division : { id: '1', name: division?.name || division || 'Management' },
-        avatar: avatar || null,
+        id: userToLogin.id,
+        name: userToLogin.name,
+        email: userToLogin.email,
+        role: userToLogin.role,
+        isActive: userToLogin.isActive,
+        division: userToLogin.division,
+        avatar: userToLogin.avatar,
+        managerId: userToLogin.managerId,
       };
       
-      console.log('Setting user data:', userData);
+      // Store user ID in localStorage for profile endpoint
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('currentUserId', userToLogin.id);
+        localStorage.setItem('accessToken', 'mock-access-token');
+        console.log('Stored in localStorage:', { userId: userToLogin.id });
+      }
+      
+      // Set user in context
       login(userData);
+      console.log('User set in context');
       
-      toast({
-        variant: "default",
-        title: "Login Successful",
-        description: "You have been logged in successfully.",
-      });
+      // Longer delay to ensure state is fully updated and persisted
+      await new Promise(resolve => setTimeout(resolve, 300));
       
-      // Redirect to dashboard after successful login
-      router.push("/");
-    } catch (error: any) {
+      // Navigate to dashboard using replace to prevent back navigation to login
+      console.log('Navigating to dashboard');
+      router.replace('/');
+    } catch (error) {
+      console.error('Login error:', error);
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description:
-          error?.response?.data?.message ||
-          "An error occurred during login. Please try again.",
+        title: "Login Error",
+        description: "An unexpected error occurred. Please try again.",
       });
     }
   };
@@ -110,45 +123,39 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleLogin();
-                }
-              }}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleLogin();
-                }
-              }}
-            />
-          </div>
+          <form onSubmit={handleLogin} id="login-form">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="admin@notch.erp"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+          </form>
         </CardContent>
         <CardFooter>
           <Button 
             className="w-full" 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleLogin();
-            }}
-            type="button"
+            onClick={handleLogin}
+            type="submit"
+            form="login-form"
           >
             Sign In
           </Button>

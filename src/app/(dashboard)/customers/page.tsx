@@ -10,33 +10,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, User, Mail, Phone, ShoppingBag, Calendar } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
+import { customersData } from '@/lib/mock-data';
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock customers data
-  const customers = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+62 123 456 7890',
-      totalOrders: 12,
-      totalSpent: 2500000,
-      status: 'active',
-      joinedDate: '2024-01-01',
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '+62 987 654 3210',
-      totalOrders: 8,
-      totalSpent: 1800000,
-      status: 'active',
-      joinedDate: '2024-01-15',
-    },
-  ];
+  // Use mock customers data
+  const customers = customersData;
 
   const getStatusBadge = (status: string) => {
     return status === 'active' ? (
@@ -48,18 +28,18 @@ export default function CustomersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Customer Management</h1>
-          <p className="text-muted-foreground">View and manage customer accounts</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Customer Management</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">View and manage customer accounts</p>
         </div>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search customers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 w-64"
+            className="pl-8 w-full sm:w-64"
           />
         </div>
       </div>
@@ -82,28 +62,28 @@ export default function CustomersPage() {
                 {customers.map((customer) => (
                   <div
                     key={customer.id}
-                    className="flex items-center justify-between border rounded-lg p-4 hover:bg-accent transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border rounded-lg p-4 hover:bg-accent transition-colors"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="h-10 w-10 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
                         <User className="h-5 w-5 text-primary" />
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{customer.name}</h3>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-semibold truncate">{customer.name}</h3>
                           {getStatusBadge(customer.status)}
                         </div>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Mail className="h-3 w-3" />
-                            {customer.email}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1 truncate">
+                            <Mail className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{customer.email}</span>
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
-                            {customer.phone}
+                          <span className="flex items-center gap-1 truncate">
+                            <Phone className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{customer.phone}</span>
                           </span>
                         </div>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <ShoppingBag className="h-3 w-3" />
                             {customer.totalOrders} orders
@@ -115,10 +95,10 @@ export default function CustomersPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right flex-shrink-0">
                       <p className="font-semibold">Rp {customer.totalSpent.toLocaleString('id-ID')}</p>
                       <p className="text-xs text-muted-foreground">Total spent</p>
-                      <Button variant="outline" size="sm" className="mt-2">
+                      <Button variant="outline" size="sm" className="mt-2 w-full sm:w-auto">
                         View Details
                       </Button>
                     </div>

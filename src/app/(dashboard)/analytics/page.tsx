@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DollarSign, TrendingUp, ShoppingCart, Users, Package, Star } from 'lucide-react';
@@ -18,22 +20,22 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
+import { salesData as mockSalesData, topProductsData, ordersData } from '@/lib/mock-data';
 
 export default function AnalyticsPage() {
-  // Mock analytics data
-  const salesData = [
-    { month: 'Jan', revenue: 45000000, orders: 320 },
-    { month: 'Feb', revenue: 52000000, orders: 380 },
-    { month: 'Mar', revenue: 48000000, orders: 350 },
-    { month: 'Apr', revenue: 61000000, orders: 420 },
-  ];
+  // Transform mock sales data for analytics
+  const salesData = mockSalesData.slice(0, 4).map((item, index) => ({
+    month: item.name,
+    revenue: item.total * 10000, // Convert to rupiah scale
+    orders: Math.floor(item.total / 100) + 200, // Generate order count
+  }));
 
-  const productPerformance = [
-    { name: 'Spicy Ramen', sales: 125, revenue: 28125000 },
-    { name: 'Gourmet Burger', sales: 98, revenue: 27195000 },
-    { name: 'Margherita Pizza', sales: 87, revenue: 20880000 },
-    { name: 'Caesar Salad', sales: 65, revenue: 11700000 },
-  ];
+  // Use top products data
+  const productPerformance = topProductsData.map((product) => ({
+    name: product.name,
+    sales: product.sales,
+    revenue: product.revenue * 1000, // Convert to rupiah scale
+  }));
 
   const categoryDistribution = [
     { name: 'Main Course', value: 65, color: '#673AB7' },
@@ -42,12 +44,18 @@ export default function AnalyticsPage() {
     { name: 'Drinks', value: 8, color: '#2196F3' },
   ];
 
+  const totalRevenue = salesData.reduce((sum, item) => sum + item.revenue, 0);
+  const totalOrders = ordersData.length * 100; // Estimate based on orders
+  const averageOrderValue = ordersData.length > 0 
+    ? ordersData.reduce((sum, order) => sum + order.total, 0) / ordersData.length 
+    : 0;
+  
   const stats = {
-    totalRevenue: 206000000,
-    totalOrders: 1470,
-    averageOrderValue: 140136,
+    totalRevenue,
+    totalOrders,
+    averageOrderValue,
     customerGrowth: 15.5,
-    topProduct: 'Spicy Ramen',
+    topProduct: topProductsData[0]?.name || 'N/A',
     rating: 4.5,
   };
 
