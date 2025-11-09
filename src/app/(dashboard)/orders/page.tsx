@@ -583,7 +583,7 @@ function OrderList({
               <p className="font-semibold text-base sm:text-sm">Rp {order.total.toLocaleString('id-ID')}</p>
             </div>
             <Button 
-              variant="outline" 
+              variant="default" 
               size="sm" 
               className="whitespace-nowrap w-full sm:w-auto"
               onClick={() => onViewOrder(order)}

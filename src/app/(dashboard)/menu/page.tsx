@@ -415,7 +415,7 @@ export default function MenuPage() {
                             <Badge variant="secondary" className="whitespace-nowrap">Inactive</Badge>
                           )}
                           <Button 
-                            variant="outline" 
+                            variant="secondary" 
                             size="sm"
                             onClick={() => handleOpenDialog(product)}
                             className="hidden sm:inline-flex"
@@ -423,7 +423,7 @@ export default function MenuPage() {
                             Edit
                           </Button>
                           <Button 
-                            variant="outline" 
+                            variant="destructive" 
                             size="sm"
                             onClick={() => handleDelete(product.id)}
                             className="flex-shrink-0"
